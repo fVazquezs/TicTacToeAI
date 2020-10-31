@@ -2,13 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Symbol
-{
-    None,
-    Cross,
-    Circle
-}
-
 public class Spot : MonoBehaviour
 {
 
