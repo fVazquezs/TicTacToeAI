@@ -988,6 +988,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f5e7ed5da844124995a59b4d96db862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BoardSize: 3
+  StartingSymbol: 2
+  AiPlayers: 01000000
 --- !u!4 &1834802301 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 303386033670255074, guid: 3e81d31a7018ac94490c978031cf61a5, type: 3}

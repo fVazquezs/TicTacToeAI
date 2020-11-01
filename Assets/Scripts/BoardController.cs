@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,10 +35,18 @@ public class BoardController : MonoBehaviour
         MakePlay(spot.line, spot.column);
     }
 
-    private void SetSymbolAt(int line, int column, Symbol symbol)
+    public void SetSymbolAt(int line, int column, Symbol symbol)
     {
-        _boardData[line, column] = symbol;
-        _spots[line, column].CurrentSymbol = symbol;
+        try
+        {
+            _boardData[line, column] = symbol;
+            _spots[line, column].CurrentSymbol = symbol;
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            Debug.LogWarning($"{line} {column}");
+            throw;
+        }
 
     }
 
