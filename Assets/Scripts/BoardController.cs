@@ -72,7 +72,7 @@ public class BoardController : MonoBehaviour
         {
             if (AiPlayers.Contains(_currentPlayer))
             {
-                if (MinMax.DoMinMax(this, _currentPlayer, out var bestPlay))
+                if (MinMax.DoMinMax(this, _currentPlayer, -200, 200, out var bestPlay))
                 {
                     MakePlay(bestPlay.Line, bestPlay.Column);
                 }

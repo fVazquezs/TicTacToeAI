@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public static class MinMax
 {
@@ -8,7 +9,7 @@ public static class MinMax
         public int Score;
     }
 
-    public static bool DoMinMax(BoardController board, Symbol player, out Play bestPlay)
+    public static bool DoMinMax(BoardController board, Symbol player, int alpha, int beta, out Play bestPlay)
     {
         bool isMin = (player == Symbol.Circle);
         bestPlay.Line = bestPlay.Column = -1;
@@ -46,14 +47,20 @@ public static class MinMax
 
                     possiblePlayExists = true;
                     board.SetSymbolAt(line, column, player);
-                    DoMinMax(board, player.GetOther(), out Play roundPlay);
+                    DoMinMax(board, player.GetOther(), alpha, beta, out Play roundPlay);
                     if (roundPlay.Score < bestPlay.Score)
                     {
                         bestPlay.Score = roundPlay.Score;
                         bestPlay.Line = line;
                         bestPlay.Column = column;
                     }
+
+                    beta = Math.Min(beta, bestPlay.Score);
                     board.SetSymbolAt(line, column, Symbol.None);
+                    if (beta <= alpha)
+                    {
+                        return false;
+                    }
                 }
             }
         }
@@ -70,14 +77,19 @@ public static class MinMax
                     } 
                     possiblePlayExists = true;
                     board.SetSymbolAt(line, column, player);
-                    DoMinMax(board, player.GetOther(), out Play roundPlay);
+                    DoMinMax(board, player.GetOther(), alpha, beta, out Play roundPlay);
                     if (roundPlay.Score > bestPlay.Score)
                     {
                         bestPlay.Score = roundPlay.Score;
                         bestPlay.Line = line;
                         bestPlay.Column = column;
                     }
+                    alpha = Math.Max(alpha, bestPlay.Score);
                     board.SetSymbolAt(line, column, Symbol.None);
+                    if (beta <= alpha)
+                    {
+                        return false;
+                    }
                 }
             }
         }
