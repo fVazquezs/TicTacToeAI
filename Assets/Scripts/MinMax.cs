@@ -32,9 +32,9 @@ public static class MinMax
         }
 
         bool possiblePlayExists = false;
-        
+
         //try play for min
-        if(isMin)
+        if (isMin)
         {
             for (int column = 0; column < board.BoardSize; column++)
             {
@@ -50,9 +50,12 @@ public static class MinMax
                     DoMinMax(board, player.GetOther(), alpha, beta, out Play roundPlay);
                     if (roundPlay.Score < bestPlay.Score)
                     {
-                        bestPlay.Score = roundPlay.Score;
-                        bestPlay.Line = line;
-                        bestPlay.Column = column;
+                        if (board.IsCalcCorrect())
+                        {
+                            bestPlay.Score = roundPlay.Score;
+                            bestPlay.Line = line;
+                            bestPlay.Column = column;
+                        }
                     }
 
                     beta = Math.Min(beta, bestPlay.Score);
@@ -74,7 +77,8 @@ public static class MinMax
                     if (board.GetSymbolAt(line, column) != Symbol.None)
                     {
                         continue;
-                    } 
+                    }
+
                     possiblePlayExists = true;
                     board.SetSymbolAt(line, column, player);
                     DoMinMax(board, player.GetOther(), alpha, beta, out Play roundPlay);
@@ -84,6 +88,7 @@ public static class MinMax
                         bestPlay.Line = line;
                         bestPlay.Column = column;
                     }
+
                     alpha = Math.Max(alpha, bestPlay.Score);
                     board.SetSymbolAt(line, column, Symbol.None);
                     if (beta <= alpha)
@@ -97,9 +102,8 @@ public static class MinMax
         if (!possiblePlayExists)
         {
             bestPlay.Score = 0;
-            Debug.Log("No possible play");
         }
-        
+
         return possiblePlayExists;
     }
 }

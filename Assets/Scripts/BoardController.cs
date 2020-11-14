@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class BoardController : MonoBehaviour
 {
-
     public int BoardSize = 3;
     public Symbol StartingSymbol = Symbol.Circle;
     public List<Symbol> AiPlayers;
@@ -13,41 +15,39 @@ public class BoardController : MonoBehaviour
     private Symbol[,] _boardData;
     private Spot[,] _spots;
     private Symbol _currentPlayer;
+    public AudioSource _makePlayAudio;
+    private bool _AIIsPlaying = false;
 
     private void Awake()
     {
+        GameController.Winner = Symbol.None;
+
+        Debug.Log(GameController.GameMode);
         _boardData = new Symbol[BoardSize, BoardSize];
         _spots = new Spot[BoardSize, BoardSize];
 
-        var allSpots = GetComponentsInChildren<Spot>();
-        foreach (var spot in allSpots)
+        Spot[] allSpots = GetComponentsInChildren<Spot>();
+        foreach (Spot spot in allSpots)
         {
             _spots[spot.line, spot.column] = spot;
         }
 
         _currentPlayer = StartingSymbol;
+        _makePlayAudio = GetComponent<AudioSource>();
     }
 
     public void SpotClicked(Spot spot)
     {
-        Debug.Log($"Line {spot.line} Column {spot.column}");
-
-        MakePlay(spot.line, spot.column);
+        if (!_AIIsPlaying)
+        {
+            MakePlay(spot.line, spot.column);
+        }
     }
 
     public void SetSymbolAt(int line, int column, Symbol symbol)
     {
-        try
-        {
-            _boardData[line, column] = symbol;
-            _spots[line, column].CurrentSymbol = symbol;
-        }
-        catch (IndexOutOfRangeException e)
-        {
-            Debug.LogWarning($"{line} {column}");
-            throw;
-        }
-
+        _boardData[line, column] = symbol;
+        _spots[line, column].CurrentSymbol = symbol;
     }
 
     public Symbol GetSymbolAt(int line, int column)
@@ -57,31 +57,50 @@ public class BoardController : MonoBehaviour
 
     public void MakePlay(int line, int column)
     {
-        SetSymbolAt(line, column, _currentPlayer);
-        _currentPlayer = _currentPlayer.GetOther();
-        Symbol winner = GetWinner();
-        if (winner == Symbol.Cross)
+        if (GetSymbolAt(line, column) == Symbol.None)
         {
-            Debug.Log("Winner is cross");
-        }
-        else if (winner == Symbol.Circle)
-        {
-            Debug.Log("Winner is circle");
-        }
-        if (winner == Symbol.None)
-        {
-            if (AiPlayers.Contains(_currentPlayer))
+            SetSymbolAt(line, column, _currentPlayer);
+            _makePlayAudio.Play();
+            _currentPlayer = _currentPlayer.GetOther();
+            Symbol winner = GetWinner();
+            if (winner == Symbol.Cross || winner == Symbol.Circle)
             {
-                if (MinMax.DoMinMax(this, _currentPlayer, -200, 200, out var bestPlay))
+                GameController.Winner = winner;
+                StartCoroutine(ChangeSceneCoroutine());
+            }
+
+            if (winner == Symbol.None)
+            {
+                if (GameController.GameMode != GameMode.Pvp && AiPlayers.Contains(_currentPlayer))
                 {
-                    MakePlay(bestPlay.Line, bestPlay.Column);
-                }
-                else
-                {
-                    Debug.Log("No available play");
+                    if (MinMax.DoMinMax(this, _currentPlayer, -200, 200, out var bestPlay))
+                    {
+                        StartCoroutine(AICoroutine(bestPlay.Line, bestPlay.Column));
+                    }
+                    else
+                    {
+                        GameController.Winner = winner;
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                    }
                 }
             }
         }
+    }
+
+    public bool IsCalcCorrect()
+    {
+        float random = Random.Range(0, 1000);
+        switch (GameController.GameMode)
+        {
+            case GameMode.Easy:
+                return random > 500;
+            case GameMode.Medium:
+                return random > 750;
+            case GameMode.Hard:
+                return true;
+        }
+
+        return true;
     }
 
     public Symbol GetWinner()
@@ -93,6 +112,7 @@ public class BoardController : MonoBehaviour
             {
                 continue;
             }
+
             int symbolCount = 0;
             for (int c = 0; c < BoardSize; c++)
             {
@@ -115,6 +135,7 @@ public class BoardController : MonoBehaviour
             {
                 continue;
             }
+
             int symbolCount = 0;
             for (int l = 0; l < BoardSize; l++)
             {
@@ -139,11 +160,14 @@ public class BoardController : MonoBehaviour
             {
                 diagonalCount1++;
             }
-            if (_boardData[index, BoardSize - index - 1] == _boardData[0, BoardSize - 1] && _boardData[0, BoardSize - 1] != Symbol.None)
+
+            if (_boardData[index, BoardSize - index - 1] == _boardData[0, BoardSize - 1] &&
+                _boardData[0, BoardSize - 1] != Symbol.None)
             {
                 diagonalCount2++;
             }
         }
+
         if (diagonalCount1 == BoardSize)
         {
             return _boardData[0, 0];
@@ -154,5 +178,22 @@ public class BoardController : MonoBehaviour
         }
 
         return Symbol.None;
+    }
+    
+    //Coroutine to make AI fake a human think time
+    IEnumerator AICoroutine(int line, int column)
+    {
+        _AIIsPlaying = true;
+        yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+
+        _AIIsPlaying = false;
+        MakePlay(line, column);
+    }
+
+    IEnumerator ChangeSceneCoroutine()
+    {
+        yield return new WaitForSeconds(1);
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

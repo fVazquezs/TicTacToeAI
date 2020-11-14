@@ -61,7 +61,7 @@ MonoBehaviour:
   line: 0
   column: 0
   CrossObjectRoot: {fileID: 6024302565861400709}
-  CircleObjectRoot: {fileID: 6024302564436288745}
+  CircleObjectRoot: {fileID: 2186174901787240796}
 --- !u!1001 &7863984708296253356
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -131,8 +131,8 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4519612015605366569, guid: 58ba7cf59d0ad764aa6d3de3fa8c3c44, type: 3}
   m_PrefabInstance: {fileID: 7863984708296253356}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6024302564436288745 stripped
+--- !u!1 &2186174901787240796 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 4519612016895802181, guid: 58ba7cf59d0ad764aa6d3de3fa8c3c44, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8319457002883200752, guid: 58ba7cf59d0ad764aa6d3de3fa8c3c44, type: 3}
   m_PrefabInstance: {fileID: 7863984708296253356}
   m_PrefabAsset: {fileID: 0}
