@@ -1,17 +1,21 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spot : MonoBehaviour
+public class GameSpot : MonoBehaviour
 {
 
     public int line;
     public int column;
+    
+    public Spot spot;
 
     public GameObject CrossObjectRoot;
     public GameObject CircleObjectRoot;
 
     private Symbol _currentSymbol;
+    public bool ScriptStarted { get; set; }
 
     public Symbol CurrentSymbol
     {
@@ -23,6 +27,12 @@ public class Spot : MonoBehaviour
 
         }
         get { return _currentSymbol; }
+    }
+
+    private void Awake()
+    {
+        spot = new Spot(line, column);
+        ScriptStarted = true;
     }
 
     private void Start()

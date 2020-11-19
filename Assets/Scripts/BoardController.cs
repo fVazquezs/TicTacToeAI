@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -13,7 +11,7 @@ public class BoardController : MonoBehaviour
     public List<Symbol> AiPlayers;
 
     private Symbol[,] _boardData;
-    private Spot[,] _spots;
+    private GameSpot[,] _gameSpots;
     private Symbol _currentPlayer;
     public AudioSource _makePlayAudio;
     private bool _AIIsPlaying = false;
@@ -24,30 +22,30 @@ public class BoardController : MonoBehaviour
 
         Debug.Log(GameController.GameMode);
         _boardData = new Symbol[BoardSize, BoardSize];
-        _spots = new Spot[BoardSize, BoardSize];
+        _gameSpots = new GameSpot[BoardSize, BoardSize];
 
-        Spot[] allSpots = GetComponentsInChildren<Spot>();
-        foreach (Spot spot in allSpots)
+        GameSpot[] allGameSpots = GetComponentsInChildren<GameSpot>();
+        foreach (GameSpot gameSpot in allGameSpots)
         {
-            _spots[spot.line, spot.column] = spot;
+            StartCoroutine(WaitUntilSpotGetStartedAndPopulate(gameSpot));
         }
 
         _currentPlayer = StartingSymbol;
         _makePlayAudio = GetComponent<AudioSource>();
     }
 
-    public void SpotClicked(Spot spot)
+    public void SpotClicked(GameSpot gameSpot)
     {
         if (!_AIIsPlaying)
         {
-            MakePlay(spot.line, spot.column);
+            MakePlay(gameSpot.spot.Line, gameSpot.spot.Column);
         }
     }
 
     public void SetSymbolAt(int line, int column, Symbol symbol)
     {
         _boardData[line, column] = symbol;
-        _spots[line, column].CurrentSymbol = symbol;
+        _gameSpots[line, column].CurrentSymbol = symbol;
     }
 
     public Symbol GetSymbolAt(int line, int column)
@@ -55,7 +53,7 @@ public class BoardController : MonoBehaviour
         return _boardData[line, column];
     }
 
-    public void MakePlay(int line, int column)
+    private void MakePlay(int line, int column)
     {
         if (GetSymbolAt(line, column) == Symbol.None)
         {
@@ -73,7 +71,11 @@ public class BoardController : MonoBehaviour
             {
                 if (GameController.GameMode != GameMode.Pvp && AiPlayers.Contains(_currentPlayer))
                 {
-                    if (MinMax.DoMinMax(this, _currentPlayer, -200, 200, out var bestPlay))
+                    if (AiMakeRandomPlay(out Spot play))
+                    {
+                        StartCoroutine(AICoroutine(play.Line, play.Column));
+                    }
+                    else if (MinMax.DoMinMax(this, _currentPlayer, -200, 200, 0, out var bestPlay))
                     {
                         StartCoroutine(AICoroutine(bestPlay.Line, bestPlay.Column));
                     }
@@ -87,20 +89,21 @@ public class BoardController : MonoBehaviour
         }
     }
 
-    public bool IsCalcCorrect()
+    public List<Spot> GetBoardEmptySpots()
     {
-        float random = Random.Range(0, 1000);
-        switch (GameController.GameMode)
+        List<Spot> freeSpots = new List<Spot>();
+        for (int column = 0; column < BoardSize; column++)
         {
-            case GameMode.Easy:
-                return random > 500;
-            case GameMode.Medium:
-                return random > 750;
-            case GameMode.Hard:
-                return true;
+            for (int line = 0; line < BoardSize; line++)
+            {
+                if (GetSymbolAt(line, column) == Symbol.None)
+                {
+                    freeSpots.Add(new Spot(line, column));
+                }
+            }
         }
 
-        return true;
+        return freeSpots;
     }
 
     public Symbol GetWinner()
@@ -179,12 +182,27 @@ public class BoardController : MonoBehaviour
 
         return Symbol.None;
     }
-    
+
+    private bool AiMakeRandomPlay(out Spot play)
+    {
+        play = null;
+        List<Spot> freeSpots = GetBoardEmptySpots();
+        if (freeSpots.Count > 0 &&
+            (GameController.GameMode == GameMode.Easy ||
+             (GameController.GameMode == GameMode.Medium && Random.value < 0.65f)))
+        {
+            play = freeSpots[Random.Range(0, freeSpots.Count)];
+            return true;
+        }
+
+        return false;
+    }
+
     //Coroutine to make AI fake a human think time
     IEnumerator AICoroutine(int line, int column)
     {
         _AIIsPlaying = true;
-        yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+        yield return new WaitForSeconds(Random.Range(0.3f, 1.2f));
 
         _AIIsPlaying = false;
         MakePlay(line, column);
@@ -192,8 +210,16 @@ public class BoardController : MonoBehaviour
 
     IEnumerator ChangeSceneCoroutine()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
+
+    IEnumerator WaitUntilSpotGetStartedAndPopulate(GameSpot gameSpot)
+    {
+        yield return gameSpot.ScriptStarted;
+        
+        _gameSpots[gameSpot.spot.Line, gameSpot.spot.Column] = gameSpot;
+    }
+    
 }

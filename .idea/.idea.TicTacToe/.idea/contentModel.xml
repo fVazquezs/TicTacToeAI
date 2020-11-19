@@ -9,9 +9,12 @@
         <e p="Scripts" t="Include">
           <e p="BoardController.cs" t="Include" />
           <e p="GameController.cs" t="Include" />
+          <e p="GameSpot.cs" t="Include" />
           <e p="MainMenu.cs" t="Include" />
           <e p="MinMax.cs" t="Include" />
-          <e p="Spot.cs" t="Include" />
+          <e p="model" t="Include">
+            <e p="Spot.cs" t="Include" />
+          </e>
           <e p="Symbol.cs" t="Include" />
         </e>
         <e p="TextMesh Pro" t="Include">
