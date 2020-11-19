@@ -906,7 +906,6 @@ MonoBehaviour:
   BoardSize: 3
   StartingSymbol: 2
   AiPlayers: 01000000
-  _makePlayAudio: {fileID: 0}
 --- !u!82 &1764280807
 AudioSource:
   m_ObjectHideFlags: 0

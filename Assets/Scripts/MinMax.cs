@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public static class MinMax
 {
@@ -34,10 +35,10 @@ public static class MinMax
         return possiblePlayExists;
     }
 
-    private static bool OpenBoard(BoardController board, Symbol player, int alpha, int beta, int depth, ref Play bestPlay,
+    private static bool OpenBoard(BoardController board, Symbol player, int alpha, int beta, int depth,
+        ref Play bestPlay,
         bool isMin, ref bool possiblePlayExists)
     {
-
         foreach (Spot spot in board.GetBoardEmptySpots())
         {
             possiblePlayExists = true;

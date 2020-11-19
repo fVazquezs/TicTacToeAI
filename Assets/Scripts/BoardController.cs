@@ -13,7 +13,7 @@ public class BoardController : MonoBehaviour
     private Symbol[,] _boardData;
     private GameSpot[,] _gameSpots;
     private Symbol _currentPlayer;
-    public AudioSource _makePlayAudio;
+    private AudioSource _makePlayAudio;
     private bool _AIIsPlaying = false;
 
     private void Awake()
@@ -211,7 +211,7 @@ public class BoardController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene("GameOver");
     }
 
     IEnumerator WaitUntilSpotGetStartedAndPopulate(GameSpot gameSpot)
