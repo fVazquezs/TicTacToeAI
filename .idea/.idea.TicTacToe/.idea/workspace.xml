@@ -20,16 +20,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56f604ec-f916-40be-b29c-97e9553beb78" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/model.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/model/Spot.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/model/Spot.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/WinnerTextController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/WinnerTextController.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TicTacToe/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TicTacToe/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TicTacToe/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TicTacToe/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameOver.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameOver.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/BoardController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/BoardController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/MinMax.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MinMax.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Spot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameSpot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Spot.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameSpot.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/MainMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MainMenu.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,12 +49,13 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/animation/Animator.cs" />
         <option value="$PROJECT_DIR$/../../../../Unity_3d_Course/3_Project_Boost/Assets/Rocket.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/GameController.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/MainMenu.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Spot.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/model/Spot.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/MinMax.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/BoardController.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/GameSpot.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/MainMenu.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/WinnerTextController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/BoardController.cs" />
       </list>
     </option>
   </component>
@@ -113,7 +111,7 @@
       <workItem from="1604106095418" duration="43000" />
       <workItem from="1604755322375" duration="7673000" />
       <workItem from="1605354574850" duration="6382000" />
-      <workItem from="1605738418586" duration="6116000" />
+      <workItem from="1605738418586" duration="7754000" />
     </task>
     <servers />
   </component>

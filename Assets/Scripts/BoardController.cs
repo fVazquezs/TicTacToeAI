@@ -20,7 +20,6 @@ public class BoardController : MonoBehaviour
     {
         GameController.Winner = Symbol.None;
 
-        Debug.Log(GameController.GameMode);
         _boardData = new Symbol[BoardSize, BoardSize];
         _gameSpots = new GameSpot[BoardSize, BoardSize];
 

@@ -1,14 +1,10 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-   private void Awake()
-   {
-      Debug.Log(GameController.Winner);
-   }
-
    public void PlayEasyMode()
    {
       GameController.GameMode = GameMode.Easy;
