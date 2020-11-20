@@ -8,17 +8,20 @@ public static class MinMax
     {
         public int Line, Column;
         public int Score;
+        public int Depth;
     }
 
     public static bool DoMinMax(BoardController board, Symbol player, int alpha, int beta, int depth, out Play bestPlay)
     {
         bool isMin = (player == Symbol.Circle);
         bestPlay.Line = bestPlay.Column = -1;
+        bestPlay.Depth = Int32.MaxValue;
         bestPlay.Score = (isMin ? 200 : -200);
 
         Symbol winner = board.GetWinner();
         if (winner != Symbol.None)
         {
+            bestPlay.Depth = depth;
             bestPlay.Score = winner == Symbol.Circle ? -100 : 100;
             return false;
         }
@@ -44,11 +47,13 @@ public static class MinMax
             possiblePlayExists = true;
             board.SetSymbolAt(spot.Line, spot.Column, player);
             DoMinMax(board, player.GetOther(), alpha, beta, depth + 1, out Play roundPlay);
-            if ((isMin && roundPlay.Score < bestPlay.Score) || (!isMin && roundPlay.Score > bestPlay.Score))
+            if ((isMin && roundPlay.Score < bestPlay.Score || !isMin && roundPlay.Score > bestPlay.Score)
+                || (roundPlay.Score == bestPlay.Score && bestPlay.Depth > roundPlay.Depth))
             {
                 bestPlay.Score = roundPlay.Score;
                 bestPlay.Line = spot.Line;
                 bestPlay.Column = spot.Column;
+                bestPlay.Depth = roundPlay.Depth;
             }
 
             if (isMin)
